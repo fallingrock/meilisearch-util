@@ -1,0 +1,59 @@
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+plugins {
+    id 'java'
+}
+
+group = 'net.fallingrock.msutil'
+version = '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'com.meilisearch.sdk:meilisearch-java:latest.release'
+
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+    withJavadocJar()
+    withSourcesJar()
+}
+
+jar {
+    archiveFileName = '../../meilisearch-util.jar'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//    from {
+//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+
+    manifest {
+        attributes(
+                'Implementation-Version': getBuildTimestamp()
+        )
+    }
+}
+
+static def getBuildTimestamp() {
+    def current = LocalDateTime.now()
+    def formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")
+    return current.format(formatter)
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+}
