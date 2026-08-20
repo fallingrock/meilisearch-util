@@ -1,8 +1,6 @@
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 group = 'net.fallingrock.msutil'
@@ -29,24 +27,12 @@ java {
     withSourcesJar()
 }
 
-jar {
-    archiveFileName = '../../meilisearch-util.jar'
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    from {
-//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-
-    manifest {
-        attributes(
-                'Implementation-Version': getBuildTimestamp()
-        )
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
-}
-
-static def getBuildTimestamp() {
-    def current = LocalDateTime.now()
-    def formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")
-    return current.format(formatter)
 }
 
 test {

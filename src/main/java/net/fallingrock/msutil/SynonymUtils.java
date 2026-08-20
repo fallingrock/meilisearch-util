@@ -1,9 +1,6 @@
 package net.fallingrock.msutil;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -11,11 +8,11 @@ import java.util.stream.Collectors;
  * Utility class for generating synonyms mappings.
  * This class provides methods to create a map where each string in a collection is mapped
  * to an array of its synonyms, which include all other strings in the collection except itself.
- *<p/>
+ * <p>
  * The class is designed to be non-instantiable and provides static utility methods for synonym generation.
  */
 @SuppressWarnings("unused")
-public class SynonymUtils {
+public final class SynonymUtils {
     private SynonymUtils() {
         // private constructor to prevent instantiation
     }
@@ -26,7 +23,7 @@ public class SynonymUtils {
      *
      * @param names a varargs array of strings for which synonyms need to be generated
      * @return a map where each string from the input array is a key, and the value is an array of strings
-     *         that are all other items from the array except the key
+     * that are all other items from the array except the key
      */
     public static Map<String, String[]> synonymGenerator(String... names) {
         return synonymGenerator(Arrays.asList(names));
@@ -37,18 +34,22 @@ public class SynonymUtils {
      * from the input list and the value is an array of all other strings from the list that are not the key.
      *
      * @param names a list of strings for which synonyms need to be generated
-     * @return a map where each string from the input list is a key, and the value is an array of strings
-     *         that are all other items from the list except the key
+     * @return a map, ordered by first occurrence in {@code names}, where each string from the input
+     * list is a key, and the value is an array of strings that are all other items from the
+     * list except the key
+     * @throws IllegalArgumentException if {@code names} contains duplicate entries
      */
     public static Map<String, String[]> synonymGenerator(List<String> names) {
-        var synonyms = names.toArray(String[]::new);
-
         return names.stream()
                     .collect(Collectors.toMap(
                             Function.identity(),
-                            name -> Arrays.stream(synonyms)
-                                          .filter(synonym -> !Objects.equals(name, synonym))
-                                          .toArray(String[]::new)
+                            name -> names.stream()
+                                         .filter(other -> !Objects.equals(name, other))
+                                         .toArray(String[]::new),
+                            (a, b) -> {
+                                throw new IllegalArgumentException("Duplicate name: " + Arrays.toString(a));
+                            },
+                            LinkedHashMap::new
                     ));
     }
 }
