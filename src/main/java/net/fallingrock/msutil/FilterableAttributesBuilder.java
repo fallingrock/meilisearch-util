@@ -10,13 +10,17 @@ import com.meilisearch.sdk.model.FilterableAttributesFilter;
 @SuppressWarnings("unused")
 public class FilterableAttributesBuilder {
 
-    private final String field;
+    private final String[] fields;
     private boolean equality;
     private boolean comparison;
     private boolean facetSearch;
 
+    public FilterableAttributesBuilder(String[] fields) {
+        this.fields = fields;
+    }
+
     public FilterableAttributesBuilder(String field) {
-        this.field = field;
+        this(new String[]{field});
     }
 
     public FilterableAttributesBuilder withEquality(boolean equality) {
@@ -43,9 +47,6 @@ public class FilterableAttributesBuilder {
         features.setFilter(filter);
         features.setFacetSearch(facetSearch);
 
-        var config = FilterableAttributesConfig.simple(field);
-        config.setFeatures(features);
-
-        return config;
+        return new FilterableAttributesConfig(fields, features);
     }
 }
