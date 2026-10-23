@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
  * <p>
  * The class is designed to be non-instantiable and provides static utility methods for synonym generation.
  */
-@SuppressWarnings("unused")
 public final class SynonymUtils {
     private SynonymUtils() {
         // private constructor to prevent instantiation
