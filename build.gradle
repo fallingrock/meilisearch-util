@@ -15,7 +15,7 @@ repositories {
 def lombokVersion = '1.18.48'
 
 dependencies {
-    implementation 'com.meilisearch.sdk:meilisearch-java:latest.release'
+    implementation 'com.meilisearch.sdk:meilisearch-java:0.22.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.22'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.4'
 
