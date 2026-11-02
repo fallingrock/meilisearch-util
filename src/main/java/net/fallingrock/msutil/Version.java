@@ -10,12 +10,21 @@ import lombok.Getter;
 @Getter
 public class Version {
 
+	/**
+	 * Meilisearch server commit sha fingerprint
+	 */
 	@JsonProperty("commitSha")
 	private String commitSha;
 
+	/**
+	 * Meilisearch server version
+	 */
 	@JsonProperty("pkgVersion")
 	private String pkgVersion;
 
+	/**
+	 * Meilisearch server commit date
+	 */
 	@JsonProperty("commitDate")
 	private String commitDate;
 }
