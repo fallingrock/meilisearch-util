@@ -4,6 +4,9 @@ import com.meilisearch.sdk.model.FilterableAttributesConfig;
 import com.meilisearch.sdk.model.FilterableAttributesFeatures;
 import com.meilisearch.sdk.model.FilterableAttributesFilter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * A builder class for constructing instances of {@link FilterableAttributesConfig}.
  * It allows configuring filterable attributes, such as equality, comparison, and facet search.
@@ -20,20 +23,18 @@ public class FilterableAttributesBuilder {
      * Initializes a new instance of the {@code FilterableAttributesBuilder} class with the specified fields.
      * This builder is used to configure filterable attributes for use in {@code FilterableAttributesConfig}.
      *
-     * @param fields an array of strings representing the fields to be configured as filterable attributes
+     * @param field1 single field to be representing the fields to be configured as filterable attributes
+     * @param remainingFields additional fields to be configured as filterable attributes
      */
-    public FilterableAttributesBuilder(String[] fields) {
-        this.fields = fields;
-    }
+    public FilterableAttributesBuilder(String field1, String... remainingFields) {
+        var allFields = new ArrayList<String>();
+        allFields.add(field1);
 
-    /**
-     * Initializes a new instance of the {@code FilterableAttributesBuilder} class with a single specified field.
-     * This builder is used to configure filterable attributes for use in {@code FilterableAttributesConfig}.
-     *
-     * @param field a string representing the single field to be configured as a filterable attribute
-     */
-    public FilterableAttributesBuilder(String field) {
-        this(new String[]{field});
+        if (remainingFields.length > 0) {
+            allFields.addAll(Arrays.asList(remainingFields));
+        }
+
+        this.fields = allFields.toArray(String[]::new);
     }
 
     /**
